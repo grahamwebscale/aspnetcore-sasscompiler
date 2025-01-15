@@ -33,9 +33,9 @@ public class HomeController : Controller
     Console.WriteLine($"sass: {sass}");
     using var ms = new MemoryStream(Encoding.UTF8.GetBytes(sass));
     // error path - causes hang/deadlock
-    //var sassResult = await _sassCompiler.CompileToStringAsync(ms, []);
+    var sassResult = await _sassCompiler.CompileToStringAsync(ms, []);
     // success path - passes "-q" arg to turn off warning output
-    var sassResult = await _sassCompiler.CompileToStringAsync(ms, ["-q"]);
+    //var sassResult = await _sassCompiler.CompileToStringAsync(ms, ["-q"]);
     
     _logger.LogInformation("generated css. Length {length}. Result: {result}", sassResult.Length, sassResult);
     return Content(sassResult, "text/css");
