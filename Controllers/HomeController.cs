@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using aspnetcoresasscompiler.Models;
 using System.Text;
 using AspNetCore.SassCompiler;
-using System.Drawing;
 
 namespace aspnetcoresasscompiler.Controllers;
 
@@ -29,16 +28,15 @@ public class HomeController : Controller
     }
 
     public async Task<ActionResult> BrandedTheme() {
-        var sass = @"$navbar-bg: #ffffff;$brand-header-color: #ffffff;body { background-color: darken($navbar-bg, 10%); color: lighten($brand-header-color, 10%) }.btn { color: lighten($brand-header-color, 10%)}.test1 { background-color: darken($navbar-bg, 10%); color: lighten($brand-header-color, 10%) }";
-        Console.WriteLine($"sass: {sass}");
-        using var ms = new MemoryStream(Encoding.UTF8.GetBytes(sass));
+        var scss = @"$navbar-bg: #ffffff;$brand-header-color: #ffffff;body { background-color: darken($navbar-bg, 10%); color: lighten($brand-header-color, 10%) }.btn { color: lighten($brand-header-color, 10%)}.test1 { background-color: darken($navbar-bg, 10%); color: lighten($brand-header-color, 10%) }";
+        using var ms = new MemoryStream(Encoding.UTF8.GetBytes(scss));
         // error path - causes hang/deadlock
-        var sassResult = await _sassCompiler.CompileToStringAsync(ms, []);
+        var result = await _sassCompiler.CompileToStringAsync(ms, []);
         // success path - passes "-q" arg to turn off warning output
-        //var sassResult = await _sassCompiler.CompileToStringAsync(ms, ["-q"]);
+        //var result = await _sassCompiler.CompileToStringAsync(ms, ["-q"]);
         
-        _logger.LogInformation("generated css. Length {length}. Result: {result}", sassResult.Length, sassResult);
-        return Content(sassResult, "text/css");
+        _logger.LogInformation("generated css. Length {length}. Result: {result}", result.Length, result);
+        return Content(result, "text/css");
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
