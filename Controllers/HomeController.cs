@@ -29,16 +29,16 @@ public class HomeController : Controller
     }
 
     public async Task<ActionResult> BrandedTheme() {
-    var sass = @"$navbar-bg: #ffffff;$brand-header-color: #ffffff;body { background-color: darken($navbar-bg, 10%); color: lighten($brand-header-color, 10%) }.btn { color: lighten($brand-header-color, 10%)}.test1 { background-color: darken($navbar-bg, 10%); color: lighten($brand-header-color, 10%) }";
-    Console.WriteLine($"sass: {sass}");
-    using var ms = new MemoryStream(Encoding.UTF8.GetBytes(sass));
-    // error path - causes hang/deadlock
-    var sassResult = await _sassCompiler.CompileToStringAsync(ms, []);
-    // success path - passes "-q" arg to turn off warning output
-    //var sassResult = await _sassCompiler.CompileToStringAsync(ms, ["-q"]);
-    
-    _logger.LogInformation("generated css. Length {length}. Result: {result}", sassResult.Length, sassResult);
-    return Content(sassResult, "text/css");
+        var sass = @"$navbar-bg: #ffffff;$brand-header-color: #ffffff;body { background-color: darken($navbar-bg, 10%); color: lighten($brand-header-color, 10%) }.btn { color: lighten($brand-header-color, 10%)}.test1 { background-color: darken($navbar-bg, 10%); color: lighten($brand-header-color, 10%) }";
+        Console.WriteLine($"sass: {sass}");
+        using var ms = new MemoryStream(Encoding.UTF8.GetBytes(sass));
+        // error path - causes hang/deadlock
+        var sassResult = await _sassCompiler.CompileToStringAsync(ms, []);
+        // success path - passes "-q" arg to turn off warning output
+        //var sassResult = await _sassCompiler.CompileToStringAsync(ms, ["-q"]);
+        
+        _logger.LogInformation("generated css. Length {length}. Result: {result}", sassResult.Length, sassResult);
+        return Content(sassResult, "text/css");
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
